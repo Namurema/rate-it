@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { HelmetProvider } from 'react-helmet-async'
 import HomePage from './pages/HomePage'
 import ProviderDetailPage from './pages/ProviderDetailPage'
 import AddProviderPage from './pages/AddProviderPage'
@@ -6,6 +7,7 @@ import AdminLoginPage from './pages/admin/AdminLoginPage'
 import AdminDashboardPage from './pages/admin/AdminDashboardPage'
 import ReviewModerationPage from './pages/admin/ReviewModerationPage'
 import ProviderModerationPage from './pages/admin/ProviderModerationPage'
+import ManageProvidersPage from './pages/admin/ManageProvidersPage'
 import ProtectedRoute from './components/ProtectedRoute'
 
 function NotFound() {
@@ -24,30 +26,35 @@ function NotFound() {
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* Public routes */}
-        <Route path="/" element={<HomePage />} />
-        <Route path="/provider/:id" element={<ProviderDetailPage />} />
-        <Route path="/add-provider" element={<AddProviderPage />} />
+    <HelmetProvider>
+      <BrowserRouter>
+        <Routes>
+          {/* Public routes */}
+          <Route path="/" element={<HomePage />} />
+          <Route path="/provider/:id" element={<ProviderDetailPage />} />
+          <Route path="/add-provider" element={<AddProviderPage />} />
 
-        {/* Admin auth */}
-        <Route path="/admin" element={<AdminLoginPage />} />
-        <Route path="/admin/login" element={<AdminLoginPage />} />
+          {/* Admin auth */}
+          <Route path="/admin" element={<AdminLoginPage />} />
+          <Route path="/admin/login" element={<AdminLoginPage />} />
 
-        {/* Protected admin routes */}
-        <Route path="/admin/dashboard" element={
-          <ProtectedRoute><AdminDashboardPage /></ProtectedRoute>
-        } />
-        <Route path="/admin/reviews" element={
-          <ProtectedRoute><ReviewModerationPage /></ProtectedRoute>
-        } />
-        <Route path="/admin/providers" element={
-          <ProtectedRoute><ProviderModerationPage /></ProtectedRoute>
-        } />
+          {/* Protected admin routes */}
+          <Route path="/admin/dashboard" element={
+            <ProtectedRoute><AdminDashboardPage /></ProtectedRoute>
+          } />
+          <Route path="/admin/reviews" element={
+            <ProtectedRoute><ReviewModerationPage /></ProtectedRoute>
+          } />
+          <Route path="/admin/providers" element={
+            <ProtectedRoute><ProviderModerationPage /></ProtectedRoute>
+          } />
+          <Route path="/admin/manage" element={
+            <ProtectedRoute><ManageProvidersPage /></ProtectedRoute>
+          } />
 
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </BrowserRouter>
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </HelmetProvider>
   )
 }
