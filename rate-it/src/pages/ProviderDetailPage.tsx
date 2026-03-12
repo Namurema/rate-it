@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { MapPin, ArrowLeft, MessageSquare } from 'lucide-react'
 import { supabase } from '../lib/supabase'
@@ -48,15 +48,7 @@ export default function ProviderDetailPage() {
   const [reviewsLoading, setReviewsLoading] = useState(true)
   const [notFound, setNotFound] = useState(false)
 
-  useEffect(() => {
-    if (id) {
-      fetchProvider()
-      fetchReviews(0)
-    }
-  }, [id])
-
-  async function fetchProvider() {
-    setProviderLoading(true)
+  const fetchProvider = useCallback(async () => {
     const { data, error } = await supabase
       .from('providers')
       .select('*')
@@ -70,10 +62,9 @@ export default function ProviderDetailPage() {
       setProvider(data)
     }
     setProviderLoading(false)
-  }
+  }, [id])
 
-  async function fetchReviews(pageIndex: number) {
-    setReviewsLoading(true)
+  const fetchReviews = useCallback(async (pageIndex: number) => {
     const from = pageIndex * PAGE_SIZE
     const to = from + PAGE_SIZE - 1
 
@@ -88,10 +79,22 @@ export default function ProviderDetailPage() {
     if (data) setReviews(data)
     if (count !== null) setReviewCount(count)
     setReviewsLoading(false)
-  }
+  }, [id])
+
+  useEffect(() => {
+    if (!id) return
+
+    const timeoutId = window.setTimeout(() => {
+      fetchProvider()
+      fetchReviews(0)
+    }, 0)
+
+    return () => window.clearTimeout(timeoutId)
+  }, [id, fetchProvider, fetchReviews])
 
   function handlePageChange(newPage: number) {
     setPage(newPage)
+    setReviewsLoading(true)
     fetchReviews(newPage)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }

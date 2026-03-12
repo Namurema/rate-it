@@ -4,12 +4,12 @@ interface AppStore {
   // State
   searchQuery: string
   selectedCategory: string
-  moderationQueue: any[]
+  moderationQueue: unknown[]
 
   // Actions
   setSearchQuery: (query: string) => void
   setCategory: (category: string) => void
-  setModerationQueue: (queue: any[]) => void
+  setModerationQueue: (queue: unknown[]) => void
 }
 
 const useAppStore = create<AppStore>((set) => ({

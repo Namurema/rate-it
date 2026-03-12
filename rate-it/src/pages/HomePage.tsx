@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
 import SearchBar from '../components/SearchBar'
 import CategoryGrid from '../components/CategoryGrid'
@@ -13,12 +13,7 @@ export default function HomePage() {
   const [activeCategory, setActiveCategory] = useState('')
   const navigate = useNavigate()
 
-  useEffect(() => {
-    fetchTopProviders()
-  }, [])
-
-  async function fetchTopProviders(category?: string) {
-    setLoading(true)
+  const fetchTopProviders = useCallback(async (category?: string) => {
     let query = supabase
       .from('providers')
       .select(`*, reviews(count)`)
@@ -30,18 +25,27 @@ export default function HomePage() {
 
     const { data, error } = await query
     if (!error && data) {
-      const mapped = data.map((p: any) => ({
+      const mapped = (data as Array<Provider & { reviews?: Array<{ count: number }> }>).map((p) => ({
         ...p,
         review_count: p.reviews?.[0]?.count ?? 0,
       }))
       setProviders(mapped)
     }
     setLoading(false)
-  }
+  }, [])
+
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => {
+      fetchTopProviders()
+    }, 0)
+
+    return () => window.clearTimeout(timeoutId)
+  }, [fetchTopProviders])
 
   function handleCategoryChange(category: string) {
     setActiveCategory(category)
     setSearchResults(null)
+    setLoading(true)
     fetchTopProviders(category || undefined)
   }
 
