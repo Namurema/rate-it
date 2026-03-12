@@ -4,6 +4,7 @@ import ProviderDetailPage from './pages/ProviderDetailPage'
 import AddProviderPage from './pages/AddProviderPage'
 import AdminLoginPage from './pages/admin/AdminLoginPage'
 import AdminDashboardPage from './pages/admin/AdminDashboardPage'
+import ProtectedRoute from './components/ProtectedRoute'
 
 function NotFound() {
   return (
@@ -23,12 +24,25 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Public routes */}
         <Route path="/" element={<HomePage />} />
         <Route path="/provider/:id" element={<ProviderDetailPage />} />
         <Route path="/add-provider" element={<AddProviderPage />} />
+
+        {/* Admin auth */}
         <Route path="/admin" element={<AdminLoginPage />} />
         <Route path="/admin/login" element={<AdminLoginPage />} />
-        <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
+
+        {/* Protected admin routes */}
+        <Route
+          path="/admin/dashboard"
+          element={
+            <ProtectedRoute>
+              <AdminDashboardPage />
+            </ProtectedRoute>
+          }
+        />
+
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
