@@ -22,12 +22,7 @@ export default function ReviewModerationPage() {
   const [loading, setLoading] = useState(true)
   const [actioningId, setActioningId] = useState<string | null>(null)
 
-  useEffect(() => {
-    fetchPendingReviews()
-  }, [])
-
   async function fetchPendingReviews() {
-    setLoading(true)
     const { data, error } = await supabase
       .from('reviews')
       .select('*, providers(name)')
@@ -37,6 +32,11 @@ export default function ReviewModerationPage() {
     if (!error && data) setReviews(data)
     setLoading(false)
   }
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchPendingReviews()
+  }, [])
 
   async function handleAction(id: string, action: 'approved' | 'rejected') {
     setActioningId(id)

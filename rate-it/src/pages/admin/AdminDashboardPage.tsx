@@ -22,13 +22,7 @@ export default function AdminDashboardPage() {
   })
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    fetchStats()
-  }, [])
-
   async function fetchStats() {
-    setLoading(true)
-
     const [pendingReviewsRes, pendingProvidersRes, approvedProvidersRes] = await Promise.all([
       supabase
         .from('reviews')
@@ -52,6 +46,11 @@ export default function AdminDashboardPage() {
 
     setLoading(false)
   }
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchStats()
+  }, [])
 
   async function handleSignOut() {
     await supabase.auth.signOut()

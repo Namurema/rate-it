@@ -5,13 +5,13 @@ interface AppStore {
   // State
   searchQuery: string
   selectedCategory: string
-  moderationQueue: any[]
+  moderationQueue: unknown[]
   session: Session | null
 
   // Actions
   setSearchQuery: (query: string) => void
   setCategory: (category: string) => void
-  setModerationQueue: (queue: any[]) => void
+  setModerationQueue: (queue: unknown[]) => void
   setSession: (session: Session | null) => void
 }
 

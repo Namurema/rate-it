@@ -39,13 +39,7 @@ export default function ProviderModerationPage() {
   const [editState, setEditState] = useState<EditState | null>(null)
   const [categories, setCategories] = useState<string[]>([])
 
-  useEffect(() => {
-    fetchPendingProviders()
-    fetchCategories()
-  }, [])
-
   async function fetchPendingProviders() {
-    setLoading(true)
     const { data, error } = await supabase
       .from('providers')
       .select('*')
@@ -60,6 +54,12 @@ export default function ProviderModerationPage() {
     const { data } = await supabase.from('categories').select('name').order('name')
     if (data) setCategories(data.map((c: { name: string }) => c.name))
   }
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchPendingProviders()
+    fetchCategories()
+  }, [])
 
   function startEditing(provider: PendingProvider) {
     setEditingId(provider.id)

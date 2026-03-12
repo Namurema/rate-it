@@ -14,12 +14,7 @@ export default function HomePage() {
   const [activeCategory, setActiveCategory] = useState('')
   const navigate = useNavigate()
 
-  useEffect(() => {
-    fetchTopProviders()
-  }, [])
-
   async function fetchTopProviders(category?: string) {
-    setLoading(true)
     let query = supabase
       .from('providers')
       .select(`*, reviews(count)`)
@@ -31,7 +26,7 @@ export default function HomePage() {
 
     const { data, error } = await query
     if (!error && data) {
-      const mapped = data.map((p: any) => ({
+      const mapped = (data as Array<Provider & { reviews?: Array<{ count: number }> }>).map((p) => ({
         ...p,
         review_count: p.reviews?.[0]?.count ?? 0,
       }))
@@ -40,9 +35,15 @@ export default function HomePage() {
     setLoading(false)
   }
 
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchTopProviders()
+  }, [])
+
   function handleCategoryChange(category: string) {
     setActiveCategory(category)
     setSearchResults(null)
+    setLoading(true)
     fetchTopProviders(category || undefined)
   }
 

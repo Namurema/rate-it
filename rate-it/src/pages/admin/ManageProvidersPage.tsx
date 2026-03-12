@@ -41,13 +41,7 @@ export default function ManageProvidersPage() {
   const [categories, setCategories] = useState<string[]>([])
   const [search, setSearch] = useState('')
 
-  useEffect(() => {
-    fetchProviders()
-    fetchCategories()
-  }, [])
-
   async function fetchProviders() {
-    setLoading(true)
     const { data, error } = await supabase
       .from('providers')
       .select('*')
@@ -62,6 +56,12 @@ export default function ManageProvidersPage() {
     const { data } = await supabase.from('categories').select('name').order('name')
     if (data) setCategories(data.map((c: { name: string }) => c.name))
   }
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchProviders()
+    fetchCategories()
+  }, [])
 
   function startEditing(provider: Provider) {
     setEditingId(provider.id)
@@ -128,7 +128,7 @@ export default function ManageProvidersPage() {
             </p>
           </div>
           <button
-            onClick={fetchProviders}
+            onClick={() => { setLoading(true); fetchProviders() }}
             className="flex items-center gap-2 text-sm text-gray-400 hover:text-white border border-gray-700 px-4 py-2 rounded-xl transition-colors"
           >
             <RefreshCw className="w-4 h-4" />

@@ -48,15 +48,7 @@ export default function ProviderDetailPage() {
   const [reviewsLoading, setReviewsLoading] = useState(true)
   const [notFound, setNotFound] = useState(false)
 
-  useEffect(() => {
-    if (id) {
-      fetchProvider()
-      fetchReviews(0)
-    }
-  }, [id])
-
   async function fetchProvider() {
-    setProviderLoading(true)
     const { data, error } = await supabase
       .from('providers')
       .select('*')
@@ -70,7 +62,6 @@ export default function ProviderDetailPage() {
   }
 
   async function fetchReviews(pageIndex: number) {
-    setReviewsLoading(true)
     const from = pageIndex * PAGE_SIZE
     const to = from + PAGE_SIZE - 1
 
@@ -87,8 +78,18 @@ export default function ProviderDetailPage() {
     setReviewsLoading(false)
   }
 
+  useEffect(() => {
+    if (id) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      fetchProvider()
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      fetchReviews(0)
+    }
+  }, [id])
+
   function handlePageChange(newPage: number) {
     setPage(newPage)
+    setReviewsLoading(true)
     fetchReviews(newPage)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
