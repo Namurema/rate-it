@@ -65,7 +65,7 @@ export default function HomePage() {
       <div className="min-h-screen bg-gray-50">
 
         {/* NAV */}
-        <nav className="flex items-center justify-between px-4 md:px-12 py-4 bg-white border-b border-gray-200">
+        <nav className="flex items-center justify-between px-4 md:px-12 py-5 bg-white border-b border-gray-200">
           <span className="text-xl md:text-2xl font-bold tracking-tight">
             Rate<span className="text-orange-500">.it</span>
           </span>
@@ -86,7 +86,7 @@ export default function HomePage() {
         </nav>
 
         {/* HERO */}
-        <section className="bg-gray-900 flex flex-col items-center justify-center text-center px-4 md:px-6 py-16 md:py-24">
+        <section className="bg-gray-900 flex flex-col items-center justify-center text-center px-4 md:px-6 py-24 md:py-36">
           <div className="inline-block text-xs font-semibold tracking-widest uppercase px-3 py-1 rounded-full mb-4 md:mb-5 bg-orange-500/10 text-orange-400 border border-orange-500/20">
             Uganda's Review Platform
           </div>
