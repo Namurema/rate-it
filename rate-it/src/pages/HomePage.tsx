@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async'
 import { supabase } from '../lib/supabase'
 import SearchBar from '../components/SearchBar'
 import CategoryGrid from '../components/CategoryGrid'
-import ProviderCard, { type Provider } from '../components/ProviderCard'
+import { type Provider } from '../components/ProviderCard'
 
 export default function HomePage() {
   const [providers, setProviders] = useState<Provider[]>([])
@@ -76,12 +76,12 @@ export default function HomePage() {
             >
               + Add Provider
             </button>
-            <a
-              href="/admin"
-              className="text-xs md:text-sm font-medium text-gray-700 border border-gray-300 px-3 md:px-4 py-2 rounded-full hover:bg-gray-50 transition-colors"
-            >
-              Admin
-            </a>
+            
+              
+              
+            
+              
+            
           </div>
         </nav>
 
@@ -140,28 +140,29 @@ export default function HomePage() {
             )}
 
             {/* No results */}
-            {!loading && !searchLoading && displayProviders.length === 0 && (
-              <div className="text-center py-16 md:py-20 rounded-2xl border border-gray-100 bg-white">
-                <p className="text-4xl mb-3">🔍</p>
-                <p className="text-gray-700 font-medium mb-1">No providers found</p>
-                <p className="text-sm text-gray-400">
-                  {isSearching ? 'Try a different search term.' : 'No approved providers in this category yet.'}
-                </p>
-              </div>
-            )}
+           
 
             {/* Results grid */}
-            {!loading && !searchLoading && displayProviders.length > 0 && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-5">
-                {displayProviders.map((provider, i) => (
-                  <ProviderCard
-                    key={provider.id}
-                    provider={provider}
-                    rank={!isSearching ? i : undefined}
-                  />
-                ))}
-              </div>
-            )}
+            {!loading && !searchLoading && displayProviders.length === 0 && (
+  <div className="text-center py-16 md:py-20 rounded-2xl border border-gray-100 bg-white">
+    <p className="text-4xl mb-3">🔍</p>
+    <p className="text-gray-700 font-medium mb-1">No providers found</p>
+    <p className="text-sm text-gray-400 mb-5">
+      {isSearching
+        ? "Can't find what you're looking for? Add it yourself."
+        : 'No approved providers in this category yet.'}
+    </p>
+    {isSearching && (
+      <button
+        onClick={() => navigate('/add-provider')}
+        className="px-5 py-2.5 bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold rounded-xl transition-colors"
+      >
+        + Add this Provider
+      </button>
+    )}
+  </div>
+)}
+            
           </section>
         </div>
 
